@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -26,6 +27,14 @@ class WatchPage extends StatefulWidget {
 
 class _WatchPageState extends State<WatchPage> {
   @override
+  void initState() {
+    super.initState();
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -45,6 +54,58 @@ class WatchPainter extends CustomPainter {
     // 1. 초침, 분침, 시침
     // 2. 시간 (1, 2, 3, 4,.... ,12)
     drawHours(canvas, size);
+
+    var now = DateTime.now();
+    drawHourTick(now, size, canvas);
+    drawMinuteTick(now, size, canvas);
+    drawSecondTick(now, size, canvas);
+
+    var center = getCenter(size);
+    canvas.drawCircle(center, 4, Paint()..color = Colors.black);
+    canvas.drawCircle(center, 2, Paint()..color = Colors.white);
+  }
+
+  void drawHourTick(DateTime now, Size size, Canvas canvas) {
+    var h = now.hour;
+    if (h >= 12) h -= 12;
+
+    var hourDegree = h * (2 * pi / 12);
+
+    var minuteDegree = (now.minute / 60) * (pi * 2 / 12);
+
+    var sumDgree = hourDegree + minuteDegree;
+
+    drawTick(canvas, size, sumDgree, 4, Colors.black54, size.width / 2 * .45);
+  }
+
+  void drawMinuteTick(DateTime now, Size size, Canvas canvas) {
+    var minuteDegree = (now.minute / 60) * (pi * 2);
+    var secondDegree = (now.second / 60) * (2 * pi / 60);
+    var sumDgree = minuteDegree + secondDegree;
+    drawTick(canvas, size, sumDgree, 3, Colors.black87, size.width / 2 * .57);
+  }
+
+  void drawSecondTick(DateTime now, Size size, Canvas canvas) {
+    var secondDegree = (now.second / 60) * (2 * pi);
+    drawTick(canvas, size, secondDegree, 1, Colors.red, size.width / 2 * .63);
+  }
+
+  double degreeConverter(double degree) {
+    return -degree + (pi / 2);
+  }
+
+  void drawTick(Canvas canvas, Size size, double degree, double thickness,
+      Color color, double length) {
+    var center = getCenter(size);
+    var o = getOffset(size, degreeConverter(degree), length);
+
+    var p = Paint();
+    p.strokeWidth = thickness;
+    p.color = color;
+    p.style = PaintingStyle.stroke;
+    p.strokeCap = StrokeCap.round;
+
+    canvas.drawLine(center, o, p);
   }
 
   void drawHours(Canvas canvas, Size size) {
@@ -55,7 +116,7 @@ class WatchPainter extends CustomPainter {
 
   void drawHour(Canvas canvas, Size size, int hour) {
     double hourLength = size.width / 2 * .8;
-    var degree = (2 * pi) * (-hour / 12) + (pi / 2);
+    var degree = degreeConverter((2 * pi) * (hour / 12));
     var o = getOffset(size, degree, hourLength);
     var minWidth = 20.0;
     var t = TextPainter(
@@ -71,7 +132,7 @@ class WatchPainter extends CustomPainter {
     t.layout(minWidth: minWidth);
 
     var resultOffset = Offset(o.dx - minWidth / 2, o.dy - minWidth / 2);
-    t.paint(canvas, o);
+    t.paint(canvas, resultOffset);
   }
 
   Offset getOffset(Size size, double degree, double length) {
