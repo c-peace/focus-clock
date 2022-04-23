@@ -37,10 +37,13 @@ class _WatchPageState extends State<WatchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: CustomPaint(painter: WatchPainter()),
+      body: Container(
+        margin: EdgeInsets.all(50),
+        child: Center(
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: CustomPaint(painter: WatchPainter()),
+          ),
         ),
       ),
     );
@@ -61,8 +64,9 @@ class WatchPainter extends CustomPainter {
     drawSecondTick(now, size, canvas);
 
     var center = getCenter(size);
-    canvas.drawCircle(center, 4, Paint()..color = Colors.black);
-    canvas.drawCircle(center, 2, Paint()..color = Colors.white);
+    canvas.drawCircle(center, size.width * 0.01, Paint()..color = Colors.black);
+    canvas.drawCircle(
+        center, size.width * 0.005, Paint()..color = Colors.white);
   }
 
   void drawHourTick(DateTime now, Size size, Canvas canvas) {
@@ -75,19 +79,22 @@ class WatchPainter extends CustomPainter {
 
     var sumDgree = hourDegree + minuteDegree;
 
-    drawTick(canvas, size, sumDgree, 4, Colors.black54, size.width / 2 * .45);
+    drawTick(canvas, size, sumDgree, size.width * .01, Colors.black54,
+        size.width / 2 * .45);
   }
 
   void drawMinuteTick(DateTime now, Size size, Canvas canvas) {
     var minuteDegree = (now.minute / 60) * (pi * 2);
     var secondDegree = (now.second / 60) * (2 * pi / 60);
     var sumDgree = minuteDegree + secondDegree;
-    drawTick(canvas, size, sumDgree, 3, Colors.black87, size.width / 2 * .57);
+    drawTick(canvas, size, sumDgree, size.width * .03 / 4, Colors.black87,
+        size.width / 2 * .57);
   }
 
   void drawSecondTick(DateTime now, Size size, Canvas canvas) {
     var secondDegree = (now.second / 60) * (2 * pi);
-    drawTick(canvas, size, secondDegree, 1, Colors.red, size.width / 2 * .63);
+    drawTick(canvas, size, secondDegree, size.width * .0025, Colors.red,
+        size.width / 2 * .63);
   }
 
   double degreeConverter(double degree) {
@@ -118,7 +125,7 @@ class WatchPainter extends CustomPainter {
     double hourLength = size.width / 2 * .8;
     var degree = degreeConverter((2 * pi) * (hour / 12));
     var o = getOffset(size, degree, hourLength);
-    var minWidth = 20.0;
+    var minWidth = size.width * 0.06;
     var t = TextPainter(
         text: TextSpan(
             text: hour.toString(),
