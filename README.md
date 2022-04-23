@@ -1,4 +1,4 @@
-# Focus Clock
+# ⏰ Focus Clock
 
 ## About
 
