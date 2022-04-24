@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:focus_clock/main.dart';
 
 class WatchPage extends StatefulWidget {
   const WatchPage({Key? key}) : super(key: key);
@@ -38,6 +39,11 @@ class WatchPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     // 1. 초침, 분침, 시침
     // 2. 시간 (1, 2, 3, 4,.... ,12)
+    var center = getCenter(size);
+
+    canvas.drawCircle(center, size.width * .46, Paint()..color = Colors.black);
+    canvas.drawCircle(center, size.width * .45, Paint()..color = Colors.white);
+
     drawHours(canvas, size);
 
     var now = DateTime.now();
@@ -45,7 +51,6 @@ class WatchPainter extends CustomPainter {
     drawMinuteTick(now, size, canvas);
     drawSecondTick(now, size, canvas);
 
-    var center = getCenter(size);
     canvas.drawCircle(center, size.width * 0.01, Paint()..color = Colors.black);
     canvas.drawCircle(
         center, size.width * 0.005, Paint()..color = Colors.white);

@@ -10,6 +10,15 @@ class ChartPage extends StatefulWidget {
 class _ChartPageState extends State<ChartPage> {
   @override
   Widget build(BuildContext context) {
-    return Text('ChartPage');
+    return Column(
+      children: [
+        SizedBox(height: 30),
+        Icon(
+          CupertinoIcons.rectangle,
+          size: 200,
+          color: CupertinoColors.activeGreen,
+        ),
+      ],
+    );
   }
 }

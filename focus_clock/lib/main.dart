@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
+      theme: const CupertinoThemeData(brightness: Brightness.light),
       home: CupertinoPageScaffold(
         navigationBar: const CupertinoNavigationBar(
             middle: Text('Focus Clock', style: TextStyle(fontSize: 19)),
@@ -48,6 +49,7 @@ class _PageSwitchState extends State<PageSwitch> {
       children: [
         Icon(
           CupertinoIcons.doc_chart,
+          size: 30,
           color: _isOn
               ? CupertinoColors.activeGreen
               : CupertinoColors.inactiveGray,
@@ -88,7 +90,7 @@ class _PageSwitchState extends State<PageSwitch> {
           Column(
             children: const [
               WatchPage(),
-              SizedBox(height: 90),
+              SizedBox(height: 65),
               PlayPauseButton(),
             ],
           )
