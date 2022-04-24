@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'chart.dart';
 import 'watch_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+bool isplayed = false;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -58,11 +59,31 @@ class _PageSwitchState extends State<PageSwitch> {
                 value: _isOn,
                 onChanged: (bool value) {
                   setState(() {
-                    _isOn = value;
+                    if (isplayed) {
+                      showCupertinoDialog(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: const Text('기록 중 입니다.'),
+                              content: const Text('''Chart를 확인하시려면,
+기록을 중지해 주세요.'''),
+                              actions: [
+                                CupertinoDialogAction(
+                                    isDefaultAction: true,
+                                    child: const Text("확인"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    }),
+                              ],
+                            );
+                          });
+                    } else {
+                      _isOn = value;
+                    }
                   });
                 })),
         if (_isOn)
-          ChartPage()
+          const ChartPage()
         else
           Column(
             children: const [
@@ -85,8 +106,6 @@ class PlayPauseButton extends StatefulWidget {
 }
 
 class _PlayPauseButtonState extends State<PlayPauseButton> {
-  bool isplayed = false;
-
   @override
   Widget build(BuildContext context) {
     return Column(
