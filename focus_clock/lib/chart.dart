@@ -11,13 +11,13 @@ class _ChartPageState extends State<ChartPage> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 30),
-        Icon(
-          CupertinoIcons.rectangle,
-          size: 200,
-          color: CupertinoColors.activeGreen,
-        ),
+        Text(
+          '총 시간 : ',
+          style: TextStyle(fontSize: 30),
+        )
       ],
     );
   }

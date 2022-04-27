@@ -41,7 +41,12 @@ class WatchPainter extends CustomPainter {
     // 2. 시간 (1, 2, 3, 4,.... ,12)
     var center = getCenter(size);
 
-    canvas.drawCircle(center, size.width * .46, Paint()..color = Colors.black);
+    canvas.drawCircle(
+        center,
+        size.width * .46,
+        Paint()
+          ..color =
+              isplayed ? Color.fromARGB(255, 253, 107, 107) : Colors.black);
     canvas.drawCircle(center, size.width * .45, Paint()..color = Colors.white);
 
     drawHours(canvas, size);
