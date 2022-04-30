@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
+import 'package:focus_clock/record.dart';
 import 'chart.dart';
-import 'watch_page.dart';
+import 'watch.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 bool isplayed = false;
+var duration = '';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -108,6 +110,7 @@ class PlayPauseButton extends StatefulWidget {
 }
 
 class _PlayPauseButtonState extends State<PlayPauseButton> {
+  Record record = Record();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -121,8 +124,10 @@ class _PlayPauseButtonState extends State<PlayPauseButton> {
             setState(() {
               if (isplayed) {
                 isplayed = false;
+                record.stop = DateTime.now();
               } else {
                 isplayed = true;
+                record.start = DateTime.now();
               }
             });
           },
@@ -131,7 +136,15 @@ class _PlayPauseButtonState extends State<PlayPauseButton> {
             color: isplayed
                 ? CupertinoColors.systemRed
                 : CupertinoColors.inactiveGray),
+        Text(record.stopTime.toString()),
+        Text(test())
       ],
     );
+  }
+
+  String test() {
+    var duration = DateTime.parse(record.stopTime)
+        .difference(DateTime.parse(record.startTime));
+    return duration.inDays.toString();
   }
 }
